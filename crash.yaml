@@ -43,7 +43,6 @@ proxy-groups:
   - {name: 🔒 私有网络, type: select, proxies: [🎯 全球直连], hidden: true}
   # 若机场的 UDP 质量不是很好，导致某游戏无法登录或进入房间，可添加 `disable-udp: true` 配置项解决
   - {name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, 🎯 全球直连]}
-  - {name: 🛑 广告域名, type: select, proxies: [🔴 全球拦截, 🟢 全球绕过]}
   - {name: 🔴 全球拦截, type: select, proxies: [REJECT], hidden: true}
   - {name: 🟢 全球绕过, type: select, proxies: [PASS], hidden: true}
   - {name: 🎯 全球直连, type: select, proxies: [DIRECT], hidden: true}
@@ -61,7 +60,6 @@ proxy-groups:
 rules:
   # 自定义规则优先放前面
   - GEOSITE,private,🔒 私有网络
-  - GEOSITE,ads,🛑 广告域名
   - GEOSITE,trackerslist,📋 Trackerslist
   # 为了使 P2P 流量（BT 下载）走直连，可添加一条 `DST-PORT` 规则（ShellCrash 会默认开启“只代理常用端口”，可删除此条 `DST-PORT`）
   - DST-PORT,6881-6889,🎯 全球直连
@@ -81,4 +79,5 @@ rules:
   - GEOIP,games,🎮 游戏平台
   - GEOIP,telegram,📲 电报消息,no-resolve
   - MATCH,🐟 漏网之鱼
+
 
