@@ -3,7 +3,7 @@ proxy-providers:
   🛫 机场订阅 1:
     type: http
     # 机场订阅链接，使用 Clash 链接
-    url: "https://cdn2.beibeicloud.shop/api/v1/client/subscribe?token=c90d5a03d0535ab7fe61859593550b57"
+    url: "https://cdn2.beibeicloud.shop/api/v1/client/subscribe?token=07625e556a17bd7298196c5349582f5e"
     path: ./proxies/airport1.yaml
     interval: 86400
     # 初步筛选需要的节点，可有效减轻路由器压力，支持正则表达式，不筛选可删除此配置项
@@ -22,7 +22,7 @@ proxy-providers:
 
   🛫 机场订阅 2:
     type: http
-    url: "https://bei.ewpbh.cn/api/v1/client/subscribe?token=c90d5a03d0535ab7fe61859593550b57"
+    url: "https://bei.ewpbh.cn/api/v1/client/subscribe?token=07625e556a17bd7298196c5349582f5e"
     path: ./proxies/airport2.yaml
     interval: 86400
     filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong|🇹🇼|台|tw|taiwan|tai wan|🇯🇵|日|jp|japan|🇸🇬|新|sg|singapore|🇺🇸|美|us|unitedstates|united states)"
@@ -257,4 +257,5 @@ rules:
   - RULE-SET,mediaip,🌍 国外媒体
   - RULE-SET,gamesip,🎮 游戏平台
   - RULE-SET,telegramip,📲 电报消息,no-resolve
+
   - MATCH,🐟 漏网之鱼
