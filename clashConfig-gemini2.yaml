@@ -1,0 +1,143 @@
+# 代理集合（获取机场订阅链接内的所有节点）
+proxy-providers:
+  🛫 机场订阅 1:
+    type: http
+    # 机场订阅链接，使用 Clash 链接
+    url: "https://106.55.228.246:36666/hxvip?token=b38afcfedc19120848f5091ef916cd31"
+    path: ./proxies/airport1.yaml
+    interval: 86400
+    # 初步筛选需要的节点，可有效减轻路由器压力，支持正则表达式，不筛选可删除此配置项
+    filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong|🇹🇼|台|tw|taiwan|tai wan|🇯🇵|日|jp|japan|🇸🇬|新|sg|singapore|🇺🇸|美|us|unitedstates|united states)"
+    # 初步排除不需要的节点，支持正则表达式，若不排除可删除此配置项
+    exclude-filter: "高倍|直连|×10|异常|失败"
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+    override:
+      # 为节点名称添加固定前缀，如节点名称原为“香港节点”会变成“🛫 机场订阅 1-香港节点”；推荐有多个机场时使用
+      additional-prefix: "🛫 机场订阅 1-"
+      # 为节点名称添加固定后缀，如节点名称原为“香港节点”会变成“香港节点-🛫 机场订阅 1”；推荐有多个机场时使用
+      additional-suffix: "-🛫 机场订阅 1"
+
+  🛫 机场订阅 2:
+    type: http
+    url: "https://cdn2.beibeicloud.shop/api/v1/client/subscribe?token=c865828b97f28049236da72216f04f35"
+    path: ./proxies/airport2.yaml
+    interval: 86400
+    filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong|🇹🇼|台|tw|taiwan|tai wan|🇯🇵|日|jp|japan|🇸🇬|新|sg|singapore|🇺🇸|美|us|unitedstates|united states)"
+    exclude-filter: "高倍|直连|×10|异常|失败"
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+    override:
+      # 为节点名称添加固定前缀，如节点名称原为“香港节点”会变成“🛫 机场订阅 2-香港节点”；推荐有多个机场时使用
+      additional-prefix: "🛫 机场订阅 2-"
+      # 为节点名称添加固定后缀，如节点名称原为“香港节点”会变成“香港节点-🛫 机场订阅 2”；推荐有多个机场时使用
+      additional-suffix: "-🛫 机场订阅 2"
+
+# DNS 
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false               # 【关键】必须关闭，防止 IPv6 优先级导致泄露
+  enhanced-mode: fake-ip    # 【关键】使用 Fake-IP 模式，配合 Tun/透明代理效果最好
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:           # 这些域名不走 Fake-IP，避免局域网设备无法连接
+    - '*.lan'
+    - '*.local'
+    - 'localhost.ptlogin2.qq.com'
+    - 'ntp.aliyun.com'
+    - 'time.apple.com'
+    - 'miwifi.com'          # 如果是小米路由器
+    - '*.router.asus.com'   # 如果是华硕路由器
+
+  # 默认 DNS：用于解析 DoH 域名的 IP，必须是纯 IP
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+  # 国内域名：直接向国内大厂查询，速度快
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+
+  # 国外域名/兜底解析：【关键】必须使用 DoH/DoT 加密 DNS，防止运营商通过 53 端口劫持
+  fallback:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+    - https://dns.google/dns-query
+    - tls://8.8.4.4:853
+
+  # 策略：什么情况使用 fallback？
+  fallback-filter:
+    geoip: true             # 启用 GeoIP 判断
+    geoip-code: CN          # 如果查询结果不是 CN（中国）IP，就认为被污染了，改用 fallback 再查一次
+    ipcidr:                 # 这些网段直接认为是由于污染产生的假 IP
+      - 240.0.0.0/4
+      - 0.0.0.0/32
+
+
+geodata-mode: true
+geox-url:
+  geosite: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat"
+  geoip: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip.dat"
+  mmdb: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country.mmdb"
+  asn: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN.mmdb"
+
+proxy-groups:
+  - {name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 👉 手动选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 📈 网络测试, type: select, proxies: [🎯 全球直连, 🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 🤖 AI 平台, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 📋 Trackerslist, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🎮 游戏服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🪟 微软服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🇬 谷歌服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🍎 苹果服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🌍 国外媒体, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 🎮 游戏平台, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 🛡️ 直连域名, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🀄️ 直连 IP, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🧱 代理顶级域名, type: select, proxies: [🚀 节点选择, 🎯 全球直连]}
+  - {name: 🧱 代理域名, type: select, proxies: [🚀 节点选择, 🎯 全球直连]}
+  - {name: 📲 电报消息, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 🔒 私有网络, type: select, proxies: [🎯 全球直连], hidden: true}
+  - {name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, 🎯 全球直连]}
+  - {name: 🛑 广告域名, type: select, proxies: [🔴 全球拦截, 🟢 全球绕过]}
+  - {name: 🔴 全球拦截, type: select, proxies: [REJECT], hidden: true}
+  - {name: 🟢 全球绕过, type: select, proxies: [PASS], hidden: true}
+  - {name: 🎯 全球直连, type: select, proxies: [DIRECT], hidden: true}
+
+  - {name: 🇭🇰 香港节点, type: url-test, tolerance: 50, use: [🛫 机场订阅], filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)"}
+  - {name: 🇹🇼 台湾节点, type: url-test, tolerance: 50, use: [🛫 机场订阅], filter: "(?i)(🇹🇼|台|tw|taiwan|tai wan)"}
+  - {name: 🇯🇵 日本节点, type: url-test, tolerance: 50, use: [🛫 机场订阅], filter: "(?i)(🇯🇵|日|jp|japan)"}
+  - {name: 🇸🇬 新加坡节点, type: url-test, tolerance: 50, use: [🛫 机场订阅], filter: "(?i)(🇸🇬|新|sg|singapore)"}
+  - {name: 🇺🇸 美国节点, type: url-test, tolerance: 100, use: [🛫 机场订阅], filter: "(?i)(🇺🇸|美|us|unitedstates|united states)"}
+  - {name: ♻️ 自动选择, type: url-test, tolerance: 100, include-all: true}
+  - {name: 👉 手动选择, type: select, include-all: true}
+
+rules:
+  - GEOSITE,private,🔒 私有网络
+  - GEOSITE,ads,🛑 广告域名
+  - GEOSITE,trackerslist,📋 Trackerslist
+  - GEOSITE,microsoft-cn,🪟 微软服务
+  - GEOSITE,apple-cn,🍎 苹果服务
+  - GEOSITE,google-cn,🇬 谷歌服务
+  - GEOSITE,games-cn,🎮 游戏服务
+  - GEOSITE,media,🌍 国外媒体
+  - GEOSITE,games,🎮 游戏平台
+  - GEOSITE,ai,🤖 AI 平台
+  - GEOSITE,networktest,📈 网络测试
+  - GEOSITE,tld-proxy,🧱 代理顶级域名
+  # 任选一
+  - GEOSITE,gfw,🧱 代理域名
+  # 任选一
+  - GEOSITE,proxy,🧱 代理域名
+  - GEOSITE,cn,🛡️ 直连域名
+  - GEOIP,privateip,🔒 私有网络,no-resolve
+  - GEOIP,cn,🀄️ 直连 IP
+  - GEOIP,media,🌍 国外媒体
+  - GEOIP,games,🎮 游戏平台
+  - GEOIP,telegram,📲 电报消息,no-resolve
+  - MATCH,🐟 漏网之鱼
