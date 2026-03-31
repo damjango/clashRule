@@ -20,25 +20,7 @@ proxy-providers:
         # 为节点名称添加固定后缀，如节点名称原为“香港节点”会变成“香港节点-🛫 机场订阅 1”；推荐有多个机场时使用
         additional-suffix: "-🛫 机场订阅 1"
         
-  🛫 机场订阅 2:
-    type: http
-    # 机场订阅链接，使用 Clash 链接
-    url: "https://106.55.228.246:36666/hxvip?token=b38afcfedc19120848f5091ef916cd31"
-    path: ./proxies/airport2.yaml
-    interval: 86400
-    # 初步筛选需要的节点，可有效减轻路由器压力，支持正则表达式，不筛选可删除此配置项
-    filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong|🇹🇼|台|tw|taiwan|tai wan|🇯🇵|日|jp|japan|🇸🇬|新|sg|singapore|🇺🇸|美|us|unitedstates|united states)"
-    # 初步排除不需要的节点，支持正则表达式，若不排除可删除此配置项
-    exclude-filter: "高倍|直连|×10|异常|失败"
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 600
-    override:
-      # 为节点名称添加固定前缀，如节点名称原为“香港节点”会变成“🛫 机场订阅 1-香港节点”；推荐有多个机场时使用
-      additional-prefix: "🛫 机场订阅 2-"
-      # 为节点名称添加固定后缀，如节点名称原为“香港节点”会变成“香港节点-🛫 机场订阅 1”；推荐有多个机场时使用
-      additional-suffix: "-🛫 机场订阅 2"
+
 
 
 # DNS 
@@ -113,11 +95,11 @@ proxy-groups:
   - {name: 🟢 全球绕过, type: select, proxies: [PASS], hidden: true}
   - {name: 🎯 全球直连, type: select, proxies: [DIRECT], hidden: true}
 
-  - {name: 🇭🇰 香港节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1, 🛫 机场订阅 2], filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)"}
-  - {name: 🇹🇼 台湾节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1, 🛫 机场订阅 2], filter: "(?i)(🇹🇼|台|tw|taiwan|tai wan)"}
-  - {name: 🇯🇵 日本节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1, 🛫 机场订阅 2], filter: "(?i)(🇯🇵|日|jp|japan)"}
-  - {name: 🇸🇬 新加坡节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1, 🛫 机场订阅 2], filter: "(?i)(🇸🇬|新|sg|singapore)"}
-  - {name: 🇺🇸 美国节点, type: url-test, tolerance: 100, use: [🛫 机场订阅 1, 🛫 机场订阅 2], filter: "(?i)(🇺🇸|美|us|unitedstates|united states)"}
+  - {name: 🇭🇰 香港节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1], filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong)"}
+  - {name: 🇹🇼 台湾节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1], filter: "(?i)(🇹🇼|台|tw|taiwan|tai wan)"}
+  - {name: 🇯🇵 日本节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1], filter: "(?i)(🇯🇵|日|jp|japan)"}
+  - {name: 🇸🇬 新加坡节点, type: url-test, tolerance: 50, use: [🛫 机场订阅 1], filter: "(?i)(🇸🇬|新|sg|singapore)"}
+  - {name: 🇺🇸 美国节点, type: url-test, tolerance: 100, use: [🛫 机场订阅 1], filter: "(?i)(🇺🇸|美|us|unitedstates|united states)"}
   - {name: ♻️ 自动选择, type: url-test, tolerance: 100, include-all: true}
   - {name: 👉 手动选择, type: select, include-all: true}
 
