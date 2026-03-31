@@ -6,7 +6,7 @@
 proxy-providers:
   🛫 机场订阅:
     type: http
-    url: "https://106.55.228.246:36666/hxvip?token=b38afcfedc19120848f5091ef916cd31"
+    url: "https://subapi01.qytsublink.com/api/v1/client/subscribe?token=7a274c597cd533e796e65b0c025330e7"
     path: ./proxies/airport1.yaml
     interval: 86400
     filter: "(?i)(🇭🇰|港|hk|hongkong|hong kong|🇹🇼|台|tw|taiwan|tai wan|🇯🇵|日|jp|japan|🇸🇬|新|sg|singapore|🇺🇸|美|us|unitedstates|united states)"
