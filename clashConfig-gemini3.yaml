@@ -3,7 +3,7 @@ proxy-providers:
   🛫 机场订阅 1:
       type: http
       # 机场订阅链接，使用 Clash 链接
-      url: "https://subapi01.qytsublink.com/api/v1/client/subscribe?token=7a274c597cd533e796e65b0c025330e7"
+      url: "https://106.55.228.246:36666/hxvip?token=b38afcfedc19120848f5091ef916cd31"
       path: ./proxies/airport1.yaml
       interval: 86400
       # 初步筛选需要的节点，可有效减轻路由器压力，支持正则表达式，不筛选可删除此配置项
